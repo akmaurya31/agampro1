@@ -306,10 +306,10 @@ exports.getusers = (req, res) => {
 
 exports.readFatca1= (req, res) => {
 
-  // console.log("AGAMJI ji", req.body)
+   console.log("AGAMJI ji", req.body)
 
 const postarray= { email:req.body.email }
-//console.log(postarray)
+console.log(postarray)
   
   Customer.getFatcamm(postarray.email,(err, data) => {
     if (err)
