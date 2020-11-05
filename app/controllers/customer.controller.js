@@ -682,3 +682,72 @@ exports.handler = function(context, event, callback) {
              }).catch(err=>{console.log(err)});
   
             };
+
+
+  //////////////////////////////////////////
+
+  exports.findAllProducts=(req, res)=>{
+    console.log("all products will be listed here")
+
+    const postarray= { 
+      
+      AMC_CODE:req.body.AMC_CODE,
+      ASSET_CLASS:req.body.ASSET_CLASS
+    }
+
+    Customer.getAllProducts(postarray,(err, data) => {
+
+
+
+  //  Customer.getAllProducts(req.params.ProductId,(err, data)=>{
+      if(err)
+      res.status(500).send({
+        message:
+        err.message || "Some error occured while"
+      })
+
+      else {
+       // console.log(data)
+           cking = {
+            status:"200",
+            message: "Successfully",
+            data_count:data.data_count,
+            data:data.data_result,
+            data_query:data.data_query
+           
+
+           }
+
+
+           res.send(cking)
+        
+      }
+
+     //   console.log("Last - Line 1080",req.body.ProductId)
+      // console.log("Last - Line 1080",req)
+    })
+  }
+
+  //////////////////////////////////////////////////
+
+
+  // Find a single Customer with a customerId
+exports.findOneProduct = (req, res) => {
+  
+  Customer.findById(req.params.ProductId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found product with id ${req.params.ProductId}.`
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving Customer with id " + req.params.ProductId
+        });
+      }
+    } else res.send(data);
+  })
+
+  
+};
+
