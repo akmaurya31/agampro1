@@ -317,8 +317,7 @@ Customer.getAllProducts =  (Req_array, result) => {
     QS=  " and ASSET_CLASS Like '%"+`${ASSET_CLASS_text}`+"%' "
   }
  
- let cQS=`SELECT * FROM products where 1=1 and AMC_CODE=${AMC_CODE} ${QS}` 
-
+  let cQS=`SELECT * FROM products where 1=1 and AMC_CODE='${AMC_CODE}' ${QS}` 
   sql.query(cQS, (err, res) => {
     if (err) {
       console.log("error: ", err);
