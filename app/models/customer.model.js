@@ -289,13 +289,19 @@ Customer.getFatcamm = (email, result) => {
 /////////////////////////////////////////
 
 
-
 Customer.getAllProducts =  (Req_array, result) => {
  // console.log("mm-line-374",Req_array)
   let AMC_CODE=Req_array.AMC_CODE; 
   let ASSET_CLASS=Req_array.ASSET_CLASS;
 
-  // console.log(Req_array.ASSET_CLASS);
+  let REINVEST_TAG=Req_array.REINVEST_TAG;
+  let DIV_GW=Req_array.DIV_GW;
+
+
+
+   console.log("m-- data is ",REINVEST_TAG);
+
+
   if (typeof ASSET_CLASS !== "undefined") {
     ASSET_CLASS=Req_array.ASSET_CLASS.toLowerCase();
   if(ASSET_CLASS==='equity'){
@@ -309,15 +315,66 @@ Customer.getAllProducts =  (Req_array, result) => {
 
 }
 
+ 
+//SELECT * FROM `products` WHERE `PRODUCT_LONG_NAME` LIKE '%Div.%' or PRODUCT_LONG_NAME LIKE '%Dividend%' ORDER BY `PRODUCT_LONG_NAME` ASC
+
+let QS2='';
+if (typeof DIV_GW !== "undefined") {
+       DIV_GW=Req_array.DIV_GW.toUpperCase();
+
+if(DIV_GW === "DIVIDEND"){
+
+  QS2=  " and ( PRODUCT_LONG_NAME Like '%Div.%' or  PRODUCT_LONG_NAME Like '%Dividend%' ) "
+}else if(DIV_GW === "GROWTH"){
+  QS2=  " and ( PRODUCT_LONG_NAME Like '%GW.%' or  PRODUCT_LONG_NAME Like '%Growth%' or  PRODUCT_LONG_NAME Like '%GW%' ) "
+}else{
+  QS2=  "and 1=1"
+}
+}
+
+
+
+
+
+
+
+
+
+
+let QS1='';
+if (typeof REINVEST_TAG !== "undefined") {
+
+if(REINVEST_TAG === "Y"){
+  QS1=  " and REINVEST_TAG='Y'"
+}else if(REINVEST_TAG === "Z" || REINVEST_TAG === "X" || REINVEST_TAG === "N" ){
+  QS1=  " and REINVEST_TAG!='Y' "
+}else{
+  QS1=  "and 1=1"
+}
+}
+
+
+
+
+
+
+
+
+
   // var x=ASSET_CLASS;
-  let QS;
+  let QS='';
   if (typeof ASSET_CLASS === "undefined") {
      QS=  "and 1=1"
   } else {    
     QS=  " and ASSET_CLASS Like '%"+`${ASSET_CLASS_text}`+"%' "
   }
+
  
-  let cQS=`SELECT * FROM products where 1=1 and AMC_CODE='${AMC_CODE}' ${QS}` 
+
+
+ 
+ let cQS=`SELECT * FROM products where 1=1 and AMC_CODE='${AMC_CODE}' ${QS}  ${QS1} ${QS2}` 
+
   sql.query(cQS, (err, res) => {
     if (err) {
       console.log("error: ", err);
