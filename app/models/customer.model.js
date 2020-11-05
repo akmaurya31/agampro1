@@ -285,4 +285,86 @@ Customer.getFatcamm = (email, result) => {
  
 });
 };
+
+/////////////////////////////////////////
+
+
+
+Customer.getAllProducts =  (Req_array, result) => {
+ // console.log("mm-line-374",Req_array)
+  let AMC_CODE=Req_array.AMC_CODE; 
+  let ASSET_CLASS=Req_array.ASSET_CLASS;
+
+  // console.log(Req_array.ASSET_CLASS);
+  if (typeof ASSET_CLASS !== "undefined") {
+    ASSET_CLASS=Req_array.ASSET_CLASS.toLowerCase();
+  if(ASSET_CLASS==='equity'){
+    ASSET_CLASS_text='EQ';
+  }else if(ASSET_CLASS==='debt' || ASSET_CLASS==='income' || ASSET_CLASS==='cash'){
+    ASSET_CLASS_text='DEBT';
+  }else{
+
+    ASSET_CLASS =undefined
+  }
+
+}
+
+  // var x=ASSET_CLASS;
+  let QS;
+  if (typeof ASSET_CLASS === "undefined") {
+     QS=  "and 1=1"
+  } else {    
+    QS=  " and ASSET_CLASS Like '%"+`${ASSET_CLASS_text}`+"%' "
+  }
+ 
+ let cQS=`SELECT * FROM products where 1=1 and AMC_CODE=${AMC_CODE} ${QS}` 
+
+  sql.query(cQS, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    let datacnt= res.length;
+
+
+    console.log("the product data are: ", res);
+     mking={
+      data_count:datacnt,
+      data_result:res,
+      data_query:cQS
+
+     }
+
+       result(null, mking);
+  });
+};
+
+
+
+
+
+
+Customer.findProductById = (ProductId, result) => {
+  sql.query(`SELECT * FROM products WHERE id = ${ProductId}`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found product: ", res[0]);
+      result(null, res[0]);
+      return;
+    }
+
+    // not found Customer with the id
+    result({ kind: "product not_found" }, null);
+  });
+};
+
+
+
 module.exports = Customer;
