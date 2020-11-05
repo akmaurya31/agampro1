@@ -42,5 +42,15 @@ module.exports = app => {
   app.post("/handxml2",customers.handxml2);
 
   app.post("/handxml3",customers.handxml3);
+  
+  
+  /////////////////////////
+  
+  //Retrieve all products
+
+  app.get("/productApi", customers.findAllProducts);
+
+  // Retrieve a single Product with ProductId
+  // app.get("/productApi/:ProductId", customers.findOneProduct);
 
 };
