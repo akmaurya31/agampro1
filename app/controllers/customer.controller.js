@@ -686,13 +686,17 @@ exports.handler = function(context, event, callback) {
 
   //////////////////////////////////////////
 
+ //////////////////////////////////////////
+
   exports.findAllProducts=(req, res)=>{
     console.log("all products will be listed here")
 
     const postarray= { 
       
       AMC_CODE:req.body.AMC_CODE,
-      ASSET_CLASS:req.body.ASSET_CLASS
+      ASSET_CLASS:req.body.ASSET_CLASS,
+      REINVEST_TAG:req.body.REINVEST_TAG,
+      DIV_GW:req.body.DIV_GW
     }
 
     Customer.getAllProducts(postarray,(err, data) => {
