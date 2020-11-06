@@ -48,7 +48,7 @@ module.exports = app => {
   
   //Retrieve all products
 
-  app.get("/productApi", customers.findAllProducts);
+  app.post("/productApi", customers.findAllProducts);
 
   // Retrieve a single Product with ProductId
   // app.get("/productApi/:ProductId", customers.findOneProduct);
